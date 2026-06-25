@@ -107,7 +107,7 @@ function woo_search()
 	return WooSearch::get_instance();
 }
 
-$GLOBALS['woo_search'] = woo_search();
+$GLOBALS['WP_IData'] = woo_search();
 
 
 add_action("init", function () {

@@ -80,7 +80,7 @@ class Integration_Manager {
 		 */
 		do_action( 'woo_search_register_integrations', $this->integration_registry );
 
-		$this->setup_index_types();
+		$this->setup_collection_blueprints();
 		$this->setup_record_services();
 	}
 
@@ -89,7 +89,7 @@ class Integration_Manager {
 	 *
 	 * @return void
 	 */
-	public function setup_index_types() {
+	public function setup_collection_blueprints() {
 
 		/**
 		 * @since 1.0
@@ -126,7 +126,7 @@ class Integration_Manager {
 	 *
 	 * @return Collection_Blueprint_Integrations_Registry
 	 */
-	public function get_index_type_registry() {
+	public function get_collection_blueprint_registry() {
 		return $this->collection_blueprint_registry;
 	}
 

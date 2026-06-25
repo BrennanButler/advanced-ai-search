@@ -17,6 +17,13 @@ interface Collection_Blueprint_Interface {
 	public function get_name(): string;
 
 	/**
+	 * Get the slug of the collection blueprint.
+	 *
+	 * @return string
+	 */
+	public function get_slug(): string;
+
+	/**
 	 * Get the prefix used on all records in this collection blueprint.
 	 *
 	 * @return string

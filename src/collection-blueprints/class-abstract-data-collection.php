@@ -23,6 +23,13 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	protected string $name;
 
 	/**
+	 * The slug of the Collection Blueprint.
+	 *
+	 * @var string
+	 */
+	protected string $slug;
+
+	/**
 	 * An array of Collection_Blueprint_Interface objects.
 	 *
 	 * @var array
@@ -66,6 +73,7 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 		}
 
 		$this->name                = $name;
+		$this->slug                = sanitize_title( $name );
 		$this->record_prefix       = $record_prefix;
 		$this->replicas            = array();
 		$this->forward_to_replicas = $forward_to_replicas;
@@ -79,6 +87,15 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 */
 	public function get_name(): string {
 		return $this->name;
+	}
+
+	/**
+	 * Get the slug of the collection blueprint.
+	 *
+	 * @return string
+	 */
+	public function get_slug(): string {
+		return $this->slug;
 	}
 
 	/**

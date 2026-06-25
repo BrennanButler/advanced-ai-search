@@ -1,20 +1,21 @@
 <?php
 /**
- * Tags Service
+ * Tags Data Source
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
+use WooSearch\RecordModel\DataSource\Data_Source_Interface;
 
 use WP_Post;
 
 /**
- * Tags_Service class.
+ * Tags_Data_Source class.
  */
-class Tags_Service {
+class Tags_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The WP_Post for this service
@@ -70,7 +71,7 @@ add_action(
 				'slug'                => 'tags-service',
 				'name'                => 'Tags Service',
 				'description'         => 'Tags Service',
-				'service'             => Tags_Service::class,
+				'service'             => Tags_Data_Source::class,
 				'index_type_supports' => array(
 					'posttype-index' => array(),
 					'woo-index' => array(),

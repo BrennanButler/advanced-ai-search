@@ -2,22 +2,22 @@
 /**
  * Record index interface.
  *
- * @package WooSearch\Indicies
+ * @package WooSearch\DataCollections
  */
 
-namespace WooSearch\Indicies;
+namespace WooSearch\CollectionBlueprints;
 
-interface Record_Index_Interface {
+interface Collection_Blueprint_Interface {
 
 	/**
-	 * Get the name of the index.
+	 * Get the name of the collection blueprint.
 	 *
 	 * @return string
 	 */
 	public function get_name(): string;
 
 	/**
-	 * Get the prefix used on all records in this index.
+	 * Get the prefix used on all records in this collection blueprint.
 	 *
 	 * @return string
 	 */
@@ -31,7 +31,7 @@ interface Record_Index_Interface {
 	public function get_attributes_for_faceting(): array;
 
 	/**
-	 * Whether the settings of this index are forwarded to it's replicas.
+	 * Whether the settings of this collection blueprint are forwarded to its replicas.
 	 *
 	 * @return boolean
 	 */
@@ -52,15 +52,15 @@ interface Record_Index_Interface {
 	public function get_ranking(): array;
 
 	/**
-	 * Add a replica index to this index.
+	 * Add a replica index to this collection blueprint.
 	 *
-	 * @param Record_Index_Interface $replica The replica index to add.
+	 * @param Collection_Blueprint_Interface $replica The replica collection blueprint to add.
 	 * @return void
 	 */
-	public function add_replica( Record_Index_Interface $replica ): void;
+	public function add_replica( Collection_Blueprint_Interface $replica ): void;
 
 	/**
-	 * Get replicas associated with this index.
+	 * Get replicas associated with this collection blueprint.
 	 *
 	 * @return array
 	 */
@@ -76,14 +76,14 @@ interface Record_Index_Interface {
 	public function fetch_records( int $page, int $per_page = 100 ): array;
 
 	/**
-	 * Get the record class that will handle the records for this index
+	 * Get the record class that will handle the records for this collection blueprint
 	 *
 	 * @return string
 	 */
 	public static function get_record(): string;
 
 	/**
-	 * Validate the index.
+	 * Validate the collection blueprint.
 	 *
 	 * @return void
 	 */

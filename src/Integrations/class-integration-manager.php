@@ -2,10 +2,9 @@
 
 namespace WooSearch\Integrations;
 
-use WooSearch\Indicies\PostType_Index;
-use WooSearch\Indicies\Woo_Product_Index;
 use WooSearch\Indicies\Index_Type_Registry;
 use WooSearch\Integrations\Index_Type_Integration;
+use WooSearch\Integrations\Collection_Blueprint_Integrations_Registry;
 use WooSearch\Integrations\Integration_Registry;
 use WooSearch\Integrations\Record_Service_Integration_Interface;
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
@@ -39,9 +38,9 @@ class Integration_Manager {
 	/**
 	 * Undocumented variable
 	 *
-	 * @var Index_Type_Registry
+	 * @var Collection_Blueprint_Integrations_Registry
 	 */
-	private Index_Type_Integrations_Registry $index_type_registry;
+	private Collection_Blueprint_Integrations_Registry $collection_blueprint_registry;
 
 	/**
 	 * Undocumented function
@@ -52,7 +51,7 @@ class Integration_Manager {
 
 		$this->record_service_registry = new Record_Service_Integrations_Registry();
 
-		$this->index_type_registry = new Index_Type_Integrations_Registry();
+		$this->collection_blueprint_registry = new Collection_Blueprint_Integrations_Registry();
 	}
 
 	/**
@@ -95,12 +94,12 @@ class Integration_Manager {
 		/**
 		 * @since 1.0
 		 */
-		do_action( 'woo_search_register_index_type_integrations', $this->index_type_registry );
+		do_action( 'woo_search_register_collection_blueprints', $this->collection_blueprint_registry );
 
 		foreach ( $this->integration_registry as $integration ) {
 
-			if ( $integration instanceof Index_Type_Integration ) {
-				$this->index_type_registry->register( $integration );
+			if ( $integration instanceof Collection_Blueprint_Integration_Interface ) {
+				$this->collection_blueprint_registry->register( $integration );
 			}
 		}
 	}
@@ -125,10 +124,10 @@ class Integration_Manager {
 	/**
 	 * Undocumented function
 	 *
-	 * @return Index_Type_Integrations_Registry
+	 * @return Collection_Blueprint_Integrations_Registry
 	 */
 	public function get_index_type_registry() {
-		return $this->index_type_registry;
+		return $this->collection_blueprint_registry;
 	}
 
 	/**

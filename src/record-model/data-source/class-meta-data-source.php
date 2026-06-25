@@ -1,19 +1,21 @@
 <?php
 /**
- * Thumbnail service
+ * Meta data source
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
 use WP_Post;
 
+use WooSearch\RecordModel\DataSource\Data_Source_Interface;
+
 /**
- * Thumbnail_Service class.
+ * Meta_Data_Source class.
  */
-class Meta_Service {
+class Meta_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The WP_Post object for this service.
@@ -53,7 +55,7 @@ class Meta_Service {
 		 */
 		if ( function_exists( 'get_fields' ) ) {
 
-			$acf_fields = get_fields( $this->post->ID );
+			$acf_fields = \get_fields( $this->post->ID );
 
 			if ( $acf_fields ) {
 				foreach ( $acf_fields as $name => $value ) {
@@ -87,7 +89,7 @@ add_action(
 				'slug'                => 'meta-service',
 				'name'                => 'Meta Service',
 				'description'         => 'Meta Service',
-				'service'             => Meta_Service::class,
+				'service'             => Meta_Data_Source::class,
 				'index_type_supports' => array(
 					'posttype-index' => array(),
 					'woo-index' => array(),

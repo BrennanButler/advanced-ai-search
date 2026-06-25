@@ -1,18 +1,18 @@
 <?php
 /**
- * Woo popular product service.
+ * Woo popular product data source.
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
 
 /**
- * Woo_Popular_Product_Service class.
+ * Woo_Popular_Product_Data_Source class.
  */
-class Woo_Popular_Product_Service {
+class Woo_Popular_Product_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The product id
@@ -84,7 +84,7 @@ add_action(
 				'slug'                => 'woo-product-service',
 				'name'                => 'Woo product Service',
 				'description'         => 'Woo product Service',
-				'service'             => Woo_Popular_Product_Service::class,
+				'service'             => Woo_Popular_Product_Data_Source::class,
 				'index_type_supports' => array(
 					'woo-index' => array(),
 				),

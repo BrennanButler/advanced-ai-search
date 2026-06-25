@@ -1,49 +1,45 @@
 <?php
 /**
- * PostType Index for core and custom WordPress post types.
+ * Woocommerce Product Collection Blueprint.
  *
- * @package WooSearch\Indicies
+ * @package WooSearch\CollectionBlueprints
  */
 
-namespace WooSearch\Indicies;
+namespace WooSearch\CollectionBlueprints;
 
-use  WooSearch\Integrations\Abstract_Index_Type_Integration;
-use WooSearch\Records\PostType_Record;
-use WooSearch\Indicies\Abstract_Record_Index;
-use WooSearch\Integrations\Index_Type_Integration_Interface;
-use WooSearch\Integrations\Index_Type_Integrations_Registry;
+use WooSearch\CollectionBlueprints\Abstract_Collection_Blueprint;
+use WooSearch\CollectionBlueprints\Collection_Blueprint_Interface;
+use WooSearch\Records\Woo_Product_Record;
+use WooSearch\Integrations\Collection_Blueprint_Integrations_Registry;
+
+use WooSearch\Integrations\Abstract_Collection_Blueprint_Integration;
+use WooSearch\Integrations\Collection_Blueprint_Integration_Interface;
+
 use WP_REST_Request;
 
 /**
- * PostType_Index class for core and custom WordPress post type Indicies.
+ * Woo_Product_Collection_Blueprint class for Woocommerce product data collections.
  */
-class PostType_Index extends Abstract_Record_Index implements Record_Index_Interface {
-
-	/**
-	 * The post type to use for this index.
-	 *
-	 * @var string
-	 */
-	protected string $post_type;
+class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint implements Collection_Blueprint_Interface {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param string  $name The name of the index.
+	 * @param string  $name The name of the collection blueprint.
 	 * @param string  $record_prefix The record prefix.
-	 * @param string  $post_type The post type to use for this index.
-	 * @param boolean $forward_to_replicas Whether to forward the settings to replica indicies.
+	 * @param boolean $forward_to_replicas Whether to forward the settings onto replica collection blueprints.
 	 */
-	public function __construct( string $post_type = 'post', string $name = "wp_posts", string $record_prefix = 'wp_', bool $forward_to_replicas = true ) {
-		parent::__construct( $name, $record_prefix, true, PostType_Record::class );
+	public function __construct( string $name, string $record_prefix = 'product_', bool $forward_to_replicas = true ) {
+		parent::__construct( $name, $record_prefix, true, Woo_Product_Record::class );
 
-		$this->post_type     = $post_type;
-		$this->record        = PostType_Record::class;
+		$this->record        = Woo_Product_Record::class;
 		$this->record_prefix = $record_prefix;
+
+		// Add replica indicies here.
 	}
 
 	/**
-	 * Get the ranking of this index for search.
+	 * Undocumented function
 	 *
 	 * @return array
 	 */
@@ -57,12 +53,13 @@ class PostType_Index extends Abstract_Record_Index implements Record_Index_Inter
 			'proximity',
 			'attribute',
 			'exact',
-			'custom',
+			'desc(popularity)',
+
 		);
 	}
 
 	/**
-	 * Get the searchable attributes for this index.
+	 * Get the searchable attributes for this collection blueprint.
 	 *
 	 * @return array
 	 */
@@ -90,14 +87,14 @@ class PostType_Index extends Abstract_Record_Index implements Record_Index_Inter
 	 * @return string
 	 */
 	public static function get_record(): string {
-		return PostType_Record::class;
+		return Woo_Product_Record::class;
 	}
 
 	/**
-	 * Fetch records internally for this index.
+	 * Fetch the records internally for this collection blueprint.
 	 *
 	 * @param integer $page The page for search.
-	 * @param integer $per_page The amount of records to retrieve per page.
+	 * @param integer $per_page The amount of records per page.
 	 * @return array
 	 */
 	public function fetch_records( int $page, $per_page = 100 ): array {
@@ -106,7 +103,7 @@ class PostType_Index extends Abstract_Record_Index implements Record_Index_Inter
 			array(
 				'posts_per_page' => $per_page,
 				'paged'          => $page,
-				'post_type'      => $this->post_type,
+				'post_type'      => 'product',
 
 			)
 		);
@@ -127,15 +124,14 @@ class PostType_Index extends Abstract_Record_Index implements Record_Index_Inter
 	}
 }
 
-
-class PostType_Index_Integration extends Abstract_Index_Type_Integration implements Index_Type_Integration_Interface {
+class Woo_Product_Collection_Blueprint_Integration extends Abstract_Collection_Blueprint_Integration implements Collection_Blueprint_Integration_Interface {
 
 	public function __construct()
 	{
 		$this->slug = "post_type_index";
 		$this->name = "Post type index";
 		$this->description = "My description";
-		$this->index_class = PostType_Index::class;
+		$this->index_class = PostType_Collection_Blueprint::class;
 	}
 
 	public function register_rest_routes(): void
@@ -166,27 +162,9 @@ class PostType_Index_Integration extends Abstract_Index_Type_Integration impleme
 	}
 }
 
-add_action( 'woo_search_register_index_type_integrations', function ( Index_Type_Integrations_Registry $index_type_registry ) {
-	/*
-	$index_type_registry->register(
-		array(
-			'slug' => 'posttype-index',
-			'name' => 'Post Type Index',
-			'description' => 'Post type index type description',
-			'class' => PostType_Index::class,
-			'options' => array(
-				array(
-					"slug" => "post-type",
-					"label" => "Post type",
-					"type" => "text",
-					"placeholder" => "post type placeholder",
-				),
-			)
-		)
-	);*/
-
-	$index_type_registry->register(
-		new PostType_Index_Integration()
+add_action( 'woo_search_register_collection_blueprints', function ( Collection_Blueprint_Integrations_Registry $collection_blueprint_registry ) {
+	
+	$collection_blueprint_registry->register(
+		new Woo_Product_Collection_Blueprint_Integration()
 	);
 });
-

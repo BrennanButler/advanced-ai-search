@@ -5,23 +5,27 @@
  * @package WooSearch\Records
  */
 
-namespace WooSearch\Records;
+namespace WooSearch\RecordModel;
 
-use WooSearch\Records\Services\Reading_Time_Service;
-use WooSearch\Records\Abstract_Record;
+use WooSearch\RecordModel\Abstract_Record_Model;
 
-use WooSearch\Records\Record_Interface;
-use WooSearch\Records\Services\Category_Service;
-use WooSearch\Records\Services\Post_Data_Service;
-use WooSearch\Records\Services\Service_Container;
-use WooSearch\Records\Services\Tags_Service;
-use WooSearch\Records\Services\Thumbnail_Service;
+use WooSearch\RecordModel\DataSource\Data_Source_Registry;
+
+use WooSearch\RecordModel\Record_Model_Interface;
+
+use WooSearch\RecordModel\DataSource\Category_Data_Source;
+use WooSearch\RecordModel\DataSource\Post_Data_Source;
+
+use WooSearch\RecordModel\DataSource\Tags_Data_Source;
+use WooSearch\RecordModel\DataSource\Thumbnail_Data_Source;
+use WooSearch\RecordModel\DataSource\Reading_Time_Data_Source;
+
 use WP_Post;
 
 /**
  * PostTypeRecord class defines a record type that can handle any core and custom post types
  */
-class PostType_Record extends Abstract_Record implements Record_Interface {
+class PostType_Record_Model extends Abstract_Record_Model implements Record_Model_Interface {
 
 	/**
 	 * The WP_Post object or the post ID
@@ -47,9 +51,9 @@ class PostType_Record extends Abstract_Record implements Record_Interface {
 	/**
 	 * The service container for this index. This is where integration can register services and additions to a record.
 	 *
-	 * @var Service_Container
+	 * @var Data_Source_Registry
 	 */
-	protected Service_Container $service_container;
+	protected Data_Source_Registry $data_source_registry;
 
 	/**
 	 * Undocumented function
@@ -57,9 +61,9 @@ class PostType_Record extends Abstract_Record implements Record_Interface {
 	 * @param WP_Post|integer   $post The WP_Post object or postId to form the record.
 	 * @param string|null       $prefix The record prefix.
 	 * @param string            $post_type The record post type.
-	 * @param Service_Container $service_container The record service container.
+	 * @param Data_Source_Registry $data_source_registry The record data source registry.
 	 */
-	public function __construct( WP_Post|int $post, string $prefix = null, string $post_type = 'post', Service_Container $service_container = null ) {
+	public function __construct( WP_Post|int $post, string $prefix = null, string $post_type = 'post', Data_Source_Registry $data_source_registry ) {
 		$this->post      = $post;
 		$this->post_type = $post_type;
 		$this->prefix    = $prefix;
@@ -81,17 +85,17 @@ class PostType_Record extends Abstract_Record implements Record_Interface {
 			)
 		);
 
-		$this->service_container = $service_container ? $service_container : new Service_Container();
+		$this->data_source_registry = $data_source_registry;
 
-		$post_data_service = new Post_Data_Service( $post );
+		$post_data_service = new Post_Data_Source( $post );
 
-		$this->service_container->register_services(
+		$this->data_source_registry->register_data_sources(
 			array(
 				'post_data_service'    => $post_data_service,
-				'categories_service'   => new Category_Service( $post_id ),
-				'reading_time_service' => new Reading_Time_Service( $post_data_service->get_word_count() ),
-				'tags_service'         => new Tags_Service( $post ),
-				'thumbnail_service'    => new Thumbnail_Service( $post ),
+				'categories_service'   => new Category_Data_Source( $post_id ),
+				'reading_time_service' => new Reading_Time_Data_Source( $post_data_service->get_word_count() ),
+				'tags_service'         => new Tags_Data_Source( $post ),
+				'thumbnail_service'    => new Thumbnail_Data_Source( $post ),
 			)
 		);
 	}
@@ -146,17 +150,17 @@ class PostType_Record extends Abstract_Record implements Record_Interface {
 
 		$post_id = gettype( $this->post ) === 'object' ? $this->post->ID : $this->post;
 
-		$post_data_service    = $this->service_container->get( 'post_data_service' );
-		$categories_service   = $this->service_container->get( 'categories_service' );
-		$tag_service          = $this->service_container->get( 'tags_service' );
-		$thumbnail_service    = $this->service_container->get( 'thumbnail_service' );
-		$reading_time_service = $this->service_container->get( 'reading_time_service' );
+		$post_data_service    = $this->data_source_registry->get( 'post_data_service' );
+		$categories_service   = $this->data_source_registry->get( 'categories_service' );
+		$tag_service          = $this->data_source_registry->get( 'tags_service' );
+		$thumbnail_service    = $this->data_source_registry->get( 'thumbnail_service' );
+		$reading_time_service = $this->data_source_registry->get( 'reading_time_service' );
 
 		$post_parent_data = array();
 		$post_parent      = $post_data_service->get_post_parent();
 
 		if ( null !== $post_parent ) {
-			$post_parent_record = new self( $post_parent, $this->prefix, $this->post_type );
+			$post_parent_record = new self( $post_parent, $this->prefix, $this->post_type, $this->data_source_registry );
 
 			$post_parent_data = $post_parent_record->get_data();
 		}

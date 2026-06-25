@@ -1,34 +1,37 @@
 <?php
 /**
- * Category Service.
+ * Category Data Source.
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
+use WooSearch\RecordModel\DataSource\Data_Source_Interface;
+
+use Exception;
 use WP_Term;
 
 /**
- * Category_Service class.
+ * Category_Data_Source class.
  */
-class Category_Service implements Record_Service_Interface {
+class Product_Category_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The post id to perform this service on
 	 *
-	 * @var integer
+	 * @var WC_Product
 	 */
-	protected int $post_id;
+	protected $product_id;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param integer $post_id The post id to perform this service on.
+	 * @param WC_Product $product The post id to perform this service on.
 	 */
-	public function __construct( int $post_id ) {
-		$this->post_id = $post_id;
+	public function __construct( $product_id ) {
+		$this->product_id = $product_id;
 	}
 
 	/**
@@ -37,14 +40,15 @@ class Category_Service implements Record_Service_Interface {
 	 * @return array
 	 */
 	public function get_data(): array {
-		$categories_ids = wp_get_post_categories(
-			$this->post_id
-		);
+
+		$product = \wc_get_product( $this->product_id );
+
+		$categories_ids = $product->get_category_ids();
 
 		$categories = array_map(
 			function ( $term_id ) {
 
-				$term = get_term_by( 'id', $term_id, 'category' );
+				$term = get_term_by( 'id', $term_id, 'product_cat' );
 
 				return array(
 					'term_id'     => $term->term_id,
@@ -76,9 +80,13 @@ class Category_Service implements Record_Service_Interface {
 	 */
 	public static function build_tree( WP_Term $term, string $hierarchy_str = '' ): string {
 
-		if ( $term->parent ) {
+		if ( $term->parent > 0 ) {
 			$parent_term = $term->parent;
-			$parent_term = get_term_by( 'id', $parent_term, 'category' );
+			$parent_term = get_term_by( 'id', $parent_term, 'product_cat' );
+
+			if ( ! $parent_term ) {
+				throw new Exception( 'Either the taxonomy or term_id is invalid and build_tree failed due to this.' );
+			}
 
 			$hierarchy_str = self::build_tree( $parent_term, $hierarchy_str );
 		}
@@ -93,7 +101,7 @@ class Category_Service implements Record_Service_Interface {
 		 * @since 1.0.0
 		 */
 		return apply_filters(
-			'woo_search_category_tree_hierarchy_str',
+			'woo_search_product_category_tree_hierarchy_str',
 			$hierarchy_str . ' > ' . $term->name,
 			$hierarchy_str,
 			$term
@@ -111,7 +119,7 @@ class Category_Service implements Record_Service_Interface {
 
 		foreach ( $categories as $category ) {
 
-			$term = get_term_by( 'id', $category, 'category' );
+			$term = get_term_by( 'id', $category, 'product_cat' );
 
 			if ( $term->parent ) {
 				$sub_cats = self::build_tree( $term );
@@ -156,7 +164,7 @@ class Category_Service implements Record_Service_Interface {
 		 * @since 1.0.0
 		 */
 		return apply_filters(
-			'woo_search_category_hierarchy',
+			'woo_search_product_category_hierarchy',
 			$tree,
 			$categories
 		);
@@ -169,12 +177,12 @@ add_action(
 
 		$record_service_integrations_registry->register(
 			array(
-				'slug'                => 'category-service',
-				'name'                => 'Category Service',
-				'description'         => 'Category Service',
-				'service'             => Category_Service::class,
+				'slug'                => 'product-category-service',
+				'name'                => 'Product Category Service',
+				'description'         => 'Product Category Service',
+				'service'             => Product_Category_Data_Source::class,
 				'index_type_supports' => array(
-					'posttype-index' => array(),
+					'woo-index' => array(),
 				),
 			)
 		);

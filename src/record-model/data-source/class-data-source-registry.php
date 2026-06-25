@@ -2,19 +2,19 @@
 /**
  * Service container used for registering attribute retrieval services for records.
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
 
 use Exception;
 
 /**
- * Service_Container class is used for registering attribute retrieval services for records.
+ * Data_Source_Registry class is used for registering attribute retrieval services for records.
  */
-class Service_Container {
+class Data_Source_Registry {
 
 	/**
 	 * An array of registered services.
@@ -24,7 +24,7 @@ class Service_Container {
 	protected array $services = array();
 
 	/**
-	 * Register a single service.
+	 * Register a single data source service.
 	 *
 	 * @param string $name The name of the service.
 	 * @param mixed  $service The service instance.
@@ -40,7 +40,7 @@ class Service_Container {
 	 * @param array $services An array of services in a key value format where the key denotes the name of the service.
 	 * @return void
 	 */
-	public function register_services( array $services ) {
+	public function register_data_sources( array $services ) {
 
 		foreach ( $services as $name => $service ) {
 			$this->services[ $name ] = $service;

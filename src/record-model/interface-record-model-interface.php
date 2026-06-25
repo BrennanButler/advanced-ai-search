@@ -2,12 +2,12 @@
 /**
  * Record Interface.
  *
- * @package WooSearch\Records
+ * @package WooSearch\RecordModel
  */
 
-namespace WooSearch\Records;
+namespace WooSearch\RecordModel;
 
-interface Record_Interface {
+interface Record_Model_Interface {
 
 	/**
 	 * Get a record's unique object ID.
@@ -41,24 +41,24 @@ interface Record_Interface {
 	/**
 	 * Validate a record
 	 *
-	 * @param Record_Interface $record The record to validate.
+	 * @param Record_Model_Interface $record The record to validate.
 	 * @return void
 	 */
-	public static function validate_record( Record_Interface $record );
+	public static function validate_record( Record_Model_Interface $record );
 
 	/**
 	 * Validate attributes.
 	 *
-	 * @param Record_Interface $record The record to validate.
+	 * @param Record_Model_Interface $record The record to validate.
 	 * @return void
 	 */
-	public static function validate_attributes( Record_Interface $record ): void;
+	public static function validate_attributes( Record_Model_Interface $record ): void;
 
 	/**
 	 * Validate object ID.
 	 *
-	 * @param Record_Interface $record The record to validate.
+	 * @param Record_Model_Interface $record The record to validate.
 	 * @return void
 	 */
-	public static function validate_object_id( Record_Interface $record );
+	public static function validate_object_id( Record_Model_Interface $record );
 }

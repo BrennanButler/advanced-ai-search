@@ -1,15 +1,15 @@
 <?php
 
-use WooSearch\Integrations\Index_Type_Integration;
+use WooSearch\Integrations\Collection_Blueprint_Integration_Interface;
 use WooSearch\Integrations\Integration_Registry;
 use WooSearch\Integrations\Record_Service_Integration_Interface;
 
 class Integration_Api_Controller
 {
 
-	protected Index_Type_Integration | Record_Service_Integration_Interface $integration;
+	protected Collection_Blueprint_Integration_Interface | Record_Service_Integration_Interface $integration;
 
-	public function __construct(Index_Type_Integration | Record_Service_Integration_Interface $integration)
+	public function __construct(Collection_Blueprint_Integration_Interface | Record_Service_Integration_Interface $integration)
 	{
 		$this->integration = $integration;
 	}

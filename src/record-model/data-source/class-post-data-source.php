@@ -1,19 +1,22 @@
 <?php
 /**
- * Post data service.
+ * Post data source.
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
+
+use WooSearch\RecordModel\DataSource\Data_Source_Interface;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
+
 use WP_Post;
 
 /**
- * Post_Data_Service class.
+ * Post_Data_Source class.
  */
-class Post_Data_Service implements Record_Service_Interface {
+class Post_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The WP_Post object
@@ -265,7 +268,7 @@ add_action(
 				'slug'                => 'post-data-service',
 				'name'                => 'Post data Service',
 				'description'         => 'Post data Service',
-				'service'             => Post_Data_Service::class,
+				'service'             => Post_Data_Source::class,
 				'index_type_supports' => array(
 					'posttype-index' => array(),
 					'woo-index' => array(),

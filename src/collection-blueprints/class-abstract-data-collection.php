@@ -1,29 +1,29 @@
 <?php
 /**
- * An abstract record Index
+ * An abstract collection blueprint
  *
- * @package WooSearch\Indicies
+ * @package WooSearch\CollectionBlueprints
  */
 
-namespace WooSearch\Indicies;
+namespace WooSearch\CollectionBlueprints;
 
 use Exception;
-use WooSearch\Indicies\Record_Index_Interface;
+use WooSearch\CollectionBlueprints\Collection_Blueprint_Interface;
 
 /**
- * Abstract record index
+ * Abstract collection blueprint
  */
-abstract class Abstract_Record_Index implements Record_Index_Interface {
+abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Interface {
 
 	/**
-	 * The name of the Index.
+	 * The name of the Collection Blueprint.
 	 *
 	 * @var string
 	 */
 	protected string $name;
 
 	/**
-	 * An array of RecordIndexInterface objects.
+	 * An array of Collection_Blueprint_Interface objects.
 	 *
 	 * @var array
 	 */
@@ -53,9 +53,9 @@ abstract class Abstract_Record_Index implements Record_Index_Interface {
 	/**
 	 * Undocumented function
 	 *
-	 * @param string  $name The name of the index.
+	 * @param string  $name The name of the collection blueprint.
 	 * @param string  $record_prefix The record prefix.
-	 * @param boolean $forward_to_replicas Whether to forward settings to replica indices.
+	 * @param boolean $forward_to_replicas Whether to forward settings to replica blueprints.
 	 * @param string  $record The record class.
 	 * @throws Exception When record is not a class that exists.
 	 */
@@ -73,7 +73,7 @@ abstract class Abstract_Record_Index implements Record_Index_Interface {
 	}
 
 	/**
-	 * Get the name of the index.
+	 * Get the name of the collection blueprint.
 	 *
 	 * @return string
 	 */
@@ -120,10 +120,10 @@ abstract class Abstract_Record_Index implements Record_Index_Interface {
 	/**
 	 * Add a replica to this index.
 	 *
-	 * @param Record_Index_Interface $replica The replica index to add.
+	 * @param Collection_Blueprint_Interface $replica The replica index to add.
 	 * @return void
 	 */
-	public function add_replica( Record_Index_Interface $replica ): void {
+	public function add_replica( Collection_Blueprint_Interface $replica ): void {
 		$this->replicas[] = $replica;
 	}
 
@@ -137,7 +137,7 @@ abstract class Abstract_Record_Index implements Record_Index_Interface {
 	}
 
 	/**
-	 * Whether to forward settings to replica indicies.
+	 * Whether to forward settings to replica blueprints.
 	 *
 	 * @return boolean
 	 */

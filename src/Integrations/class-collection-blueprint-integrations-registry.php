@@ -10,7 +10,7 @@ namespace WooSearch\Integrations;
 use Exception;
 use Iterator;
 
-class Index_Type_Integrations_Registry implements Iterator {
+class Collection_Blueprint_Integrations_Registry implements Iterator {
 
 	private $position = 0;
 
@@ -46,7 +46,7 @@ class Index_Type_Integrations_Registry implements Iterator {
 	}
 
 	
-	public function register( Index_Type_Integration_Interface|array $integration ) {
+	public function register( Collection_Blueprint_Integration_Interface $integration ) {
 		$this->integrations[] = $integration;
 	}
 
@@ -60,7 +60,7 @@ class Index_Type_Integrations_Registry implements Iterator {
 		);
 
 		if ( count( $filtered_integrations ) < 1 ) {
-			throw new Exception( "Attempted to retrieve an index type that doesn't exist" );
+			throw new Exception( "Attempted to retrieve a collection blueprint that doesn't exist" );
 		}
 
 		// We should only expect one result.

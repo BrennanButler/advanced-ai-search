@@ -6,13 +6,14 @@
 
 namespace WooSearch\Integrations;
 
-use WooSearch\Indicies\Abstract_Record_Index;
-use WooSearch\Integrations\Index_Type_Integration_Interface;
+
+use WP_REST_Request;
+
 
 /**
  * Undocumented class
  */
-abstract class Abstract_Index_Type_Integration implements Index_Type_Integration_Interface {
+abstract class Abstract_Collection_Blueprint_Integration implements Collection_Blueprint_Integration_Interface {
 
 	protected string $slug;
 

@@ -25,10 +25,10 @@ use WooSearch\Integrations\Integration_Manager;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/src/Records/Services/services.php';
+require_once __DIR__ . '/src/record-model/data-source/data-sources.php';
 
-require_once __DIR__ . '/src/Indicies/class-posttype-index.php';
-require_once __DIR__ . '/src/Indicies/class-woo-product-index.php';
+require_once __DIR__ . '/src/collection-blueprints/class-posttype-data-collection.php';
+require_once __DIR__ . '/src/collection-blueprints/class-woo-product-data-collection.php';
 
 require_once __DIR__ . '/includes/helpers.php';
 

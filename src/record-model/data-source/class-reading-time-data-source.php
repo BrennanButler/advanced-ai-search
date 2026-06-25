@@ -1,18 +1,18 @@
 <?php
 /**
- * Reading time service.
+ * Reading time data source.
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
-
+use WooSearch\RecordModel\DataSource\Data_Source_Interface;
 /**
- * Reading_Time_Service class.
+ * Reading_Time_Data_Source class.
  */
-class Reading_Time_Service {
+class Reading_Time_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The wordcount
@@ -59,7 +59,7 @@ add_action(
 				'slug'                => 'reading-time-service',
 				'name'                => 'Reading time Service',
 				'description'         => 'Reading time Service',
-				'service'             => Reading_Time_Service::class,
+				'service'             => Reading_Time_Data_Source::class,
 				'index_type_supports' => array(
 					'posttype-index' => array(),
 					'woo-index' => array(),

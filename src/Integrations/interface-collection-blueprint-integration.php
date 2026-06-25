@@ -1,16 +1,13 @@
 <?php
 /**
- * Index Type Integration
+ * Collection Blueprint Integration
  *
  * @package WooSearch\Integrations
  */
 
 namespace WooSearch\Integrations;
 
-use WooSearch\Indicies\Record_Index_Interface;
-
-
-interface Index_Type_Integration_Interface {
+interface Collection_Blueprint_Integration_Interface {
 
     public function get_name(): string;
 

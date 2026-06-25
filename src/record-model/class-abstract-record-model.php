@@ -2,22 +2,22 @@
 /**
  * Abstract record class.
  *
- * @package WooSearch\Records
+ * @package WooSearch\RecordModel
  */
 
-namespace WooSearch\Records;
+namespace WooSearch\RecordModel;
 
 use WooSearch\Records\Attributes\AttributeInterface;
-use WooSearch\Records\Record_Interface;
+use WooSearch\RecordModel\Record_Model_Interface;
 
 use Exception;
 
 /**
  * AbstractRecord
  *
- * Demonstrates the minimum implementation of the RecordInterface
+ * Demonstrates the minimum implementation of the Record_Model_Interface
  */
-abstract class Abstract_Record implements Record_Interface {
+abstract class Abstract_Record_Model implements Record_Model_Interface {
 
 	/**
 	 * A unique identifier for a particular record
@@ -45,10 +45,10 @@ abstract class Abstract_Record implements Record_Interface {
 	/**
 	 * Validate a record. Throws an exception at runtime if the record fails validation
 	 *
-	 * @param Record_Interface $record The record to validate.
+	 * @param Record_Model_Interface $record The record to validate.
 	 * @return void
 	 */
-	public static function validate_record( Record_Interface $record ) {
+	public static function validate_record( Record_Model_Interface $record ) {
 		self::validate_attributes( $record );
 		self::validate_object_id( $record );
 	}
@@ -56,11 +56,11 @@ abstract class Abstract_Record implements Record_Interface {
 	/**
 	 * Validate the attributes of a record. Throws an exception in runtime
 	 *
-	 * @param Record_Interface $record The record to validate.
+	 * @param Record_Model_Interface $record The record to validate.
 	 * @return void
 	 * @throws Exception When the record contains attributes not specified in the record class.
 	 */
-	public static function validate_attributes( Record_Interface $record ): void {
+	public static function validate_attributes( Record_Model_Interface $record ): void {
 
 		$attributes = $record->get_attributes();
 		$data       = $record->get_data();
@@ -75,11 +75,11 @@ abstract class Abstract_Record implements Record_Interface {
 	/**
 	 * Validate the objectId
 	 *
-	 * @param Record_Interface $record The record to validate.
+	 * @param Record_Model_Interface $record The record to validate.
 	 * @return void
 	 * @throws Exception When object IDs contain spaces.
 	 */
-	public static function validate_object_id( Record_Interface $record ) {
+	public static function validate_object_id( Record_Model_Interface $record ) {
 		$object_id = $record->get_object_id();
 
 		if ( str_contains( $object_id, ' ' ) ) {

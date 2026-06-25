@@ -1,20 +1,20 @@
 <?php
 /**
- * Woo Pricing Service
+ * Woo Pricing Data Source
  *
- * @package WooSearch\Records\Services
+ * @package WooSearch\RecordModel\DataSource
  */
 
-namespace WooSearch\Records\Services;
+namespace WooSearch\RecordModel\DataSource;
 
 use WooSearch\Integrations\Record_Service_Integrations_Registry;
 
 use WC_Product;
 
 /**
- * Woo_Pricing_service class.
+ * Woo_Pricing_Data_Source class.
  */
-class Woo_Pricing_Service {
+class Woo_Pricing_Data_Source implements Data_Source_Interface {
 
 	/**
 	 * The product for this service.
@@ -57,7 +57,7 @@ add_action(
 				'slug'                => 'woo-pricing-service',
 				'name'                => 'Woo pricing Service',
 				'description'         => 'Woo pricing Service',
-				'service'             => Woo_Pricing_Service::class,
+				'service'             => Woo_Pricing_Data_Source::class,
 				'index_type_supports' => array(
 					'woo-index' => array(),
 				),

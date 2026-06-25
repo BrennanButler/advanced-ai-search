@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "advanced-ai-search/hits",
+    "title": "hits",
+    "category": "text",
+    "icon": "database-import",
+    "description": "Shows warning, error or success notices...",
+    "keywords": [ "alert", "message" ],
+    "version": "1.0.3",
+    "textdomain": "my-plugin",
+    "attributes": {
+        "escapeHTML": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "supports": {
+        "align": true
+    },
+    "styles": [
+        { "name": "default", "label": "Default", "isDefault": true },
+        { "name": "infinite", "label": "Infinite results" }
+    ],
+    "variations": [
+        {
+            "name": "example",
+            "title": "Example",
+            "attributes": {
+                "message": "This is an example!"
+            }
+        }
+    ],
+    "editorScript": "file:./index.ts",
+    "viewScript": [ "file:./view.ts" ],
+    "editorStyle": "file:./index.css",
+    "style": [ "file:./style-index.css" ],
+    "render": "file:/render.php"
+}

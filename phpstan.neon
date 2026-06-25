@@ -1,0 +1,8 @@
+parameters:
+	paths:
+		- src
+		- tests
+		- ./plugin.php
+
+	excludePaths:
+		- src/Admin/AdminApp/node_modules

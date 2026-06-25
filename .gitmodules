@@ -1,0 +1,3 @@
+[submodule "src/Admin/AdminApp"]
+	path = src/Admin/AdminApp
+	url = https://github.com/Brennan-International/Commercial-WP-Woo-Search-Admin-App

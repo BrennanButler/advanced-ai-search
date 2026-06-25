@@ -1,0 +1,25 @@
+{
+    "main": "src/index.js",
+    "scripts": {
+        "wp-env:start": "wp-env start --xdebug=coverage",
+        "test:unit": "wp-env run tests-cli --env-cwd=wp-content/plugins/commercial-algolia ./vendor/bin/phpunit --configuration phpunit.xml --coverage-html coverage --coverage-filter src",
+        "test:unit:debug": "wp-env run tests-cli --env-cwd=wp-content/plugins/commercial-algolia ./vendor/bin/phpunit --configuration phpunit.xml --debug",
+        "test:codestandards": "./vendor/bin/phpcs --ignore=*/vendor/*,*/tests/* --standard=WooCommerce-Core .",
+        "test:phpstan": "./vendor/bin/phpstan analyse -c phpstan.neon",
+        "build": "wp-scripts build",
+        "build:all": "./build.sh",
+        "start": "wp-scripts start"
+    },
+    "devDependencies": {
+        "@types/wordpress__block-editor": "^15.0.6",
+        "@wordpress/eslint-plugin": "^22.22.0",
+        "@wordpress/prettier-config": "^4.48.0",
+        "@wordpress/scripts": "^30.27.0",
+        "eslint-config-prettier": "^10.1.8"
+    },
+    "dependencies": {
+        "@wordpress/dataviews": "^4.11.1",
+        "algoliasearch": "^5.46.1",
+        "instantsearch.js": "^4.85.2"
+    }
+}

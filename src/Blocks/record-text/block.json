@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "advanced-ai-search/record-text",
+    "title": "Record text",
+    "category": "text",
+    "parent": [
+        "advanced-ai-search/hits"
+    ],
+    "icon": "text",
+    "description": "Display text content from the search record.",
+    "keywords": [ "text", "record", "value" ],
+    "version": "1.0",
+    "textdomain": "my-plugin",
+    "attributes": {
+        "field": {
+            "type": "string"
+        }
+    },
+    "usesContext": [
+        "advanced-ai-search/search-index"
+    ],
+    "supports": {
+        "align": true,
+        "__experimentalLabel": "title"
+    },
+    "editorScript": "file:./index.ts",
+    "viewScript": [ "file:./view.ts" ],
+    "editorStyle": "file:./index.css",
+    "style": [ "file:./style-index.css" ],
+    "render": "file:./render.php"
+}

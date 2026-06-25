@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "advanced-ai-search/record-image",
+    "title": "Record image",
+    "category": "text",
+    "parent": [
+        "advanced-ai-search/hits",
+        "advanced-ai-search/infinite-hits"
+    ],
+    "icon": "star",
+    "description": "Shows warning, error or success notices...",
+    "keywords": [ "alert", "message" ],
+    "version": "1.0.3",
+    "textdomain": "my-plugin",
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "figCaption": {
+            "type": "string"
+        }
+    },
+    "usesContext": [
+        "advanced-ai-search/search-id",
+        "images"
+    ],
+    "supports": {
+        "spacing": {
+            "margin": true,
+            "padding": true
+        },
+        "align": true,
+        "__experimentalLabel": "title"
+    },
+    "styles": [
+        { "name": "default", "label": "Default", "isDefault": true },
+        { "name": "other", "label": "Other" }
+    ],
+    "example": {
+        
+    },
+    "variations": [
+        {
+            "name": "example",
+            "title": "Example",
+            "attributes": {
+                "message": "This is an example!"
+            }
+        }
+    ],
+    "editorScript": "file:./index.ts",
+    "viewScript": [ "file:./view.ts" ],
+    "editorStyle": "file:./index.css",
+    "style": [ "file:./style-index.css" ],
+    "render": "file:./render.php"
+}

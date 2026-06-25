@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "advanced-ai-search/intelligent-search",
+    "title": "Intelligent Search",
+    "category": "text",
+    "icon": "search",
+    "description": "Main block",
+    "keywords": [ "search", "intelligent" ],
+    "version": "1.0.3",
+    "textdomain": "my-plugin",
+    "attributes": {
+        "searchIndex": {
+            "type": "string"
+        }
+    },
+    "providesContext": {
+        "advanced-ai-search/search-index": "searchIndex"
+    },
+    "supports": {
+        "align": true
+    },
+    "styles": [
+        { "name": "default", "label": "Default", "isDefault": true },
+        { "name": "other", "label": "Other" }
+    ],
+    "example": {
+        
+    },
+    "variations": [
+        {
+            "name": "example",
+            "title": "Example",
+            "attributes": {
+                "message": "This is an example!"
+            }
+        }
+    ],
+    "render": "file:./render.php",
+    "editorScript": "file:./index.ts",
+    "viewScript": [ "file:./view.ts" ],
+    "editorStyle": "file:./index.css",
+    "style": [ "file:./style-index.css" ]
+}

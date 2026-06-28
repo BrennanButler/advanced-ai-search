@@ -20,8 +20,10 @@ define('PLUGIN_ABSPATH', __FILE__);
 
 use WooSearch\Admin\Admin_Pages;
 use WooSearch\Admin\Admin_React_App;
-use WooSearch\Api\Api;
+use WooSearch\Rest\Api;
 use WooSearch\Integrations\Integration_Manager;
+
+use WooSearch\DataCollection\Storage\WP_Collection_Storage;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -107,7 +109,7 @@ function woo_search()
 	return WooSearch::get_instance();
 }
 
-$GLOBALS['WP_IData'] = woo_search();
+$GLOBALS['woo_search'] = woo_search();
 
 
 add_action("init", function () {
@@ -118,6 +120,14 @@ add_action("init", function () {
 			'public' => true,
 		)
 	);
+});
+
+register_activation_hook(__FILE__, function () {
+
+	global $wpdb;
+	
+	$collection_storage = new WP_Collection_Storage($wpdb);
+	$collection_storage->setup_storage();
 });
 
 

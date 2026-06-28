@@ -9,6 +9,7 @@ namespace WooSearch\RecordModel;
 
 use WooSearch\Records\Attributes\AttributeInterface;
 use WooSearch\RecordModel\Record_Model_Interface;
+use WooSearch\RecordModel\DataSource\Data_Source_Registry;
 
 use Exception;
 
@@ -33,6 +34,12 @@ abstract class Abstract_Record_Model implements Record_Model_Interface {
 	 */
 	protected array $data;
 
+	protected static Data_Source_Registry $data_source_registry;
+
+	public function __construct() {
+		self::$data_source_registry = new Data_Source_Registry();
+	
+	}
 	/**
 	 * Return the unique object identifier of a record.
 	 *
@@ -40,6 +47,10 @@ abstract class Abstract_Record_Model implements Record_Model_Interface {
 	 */
 	public function get_object_id(): string {
 		return $this->object_id;
+	}
+
+	public static function get_attributes(): array {
+		return self::$data_source_registry->get_all_sources_slugs();
 	}
 
 	/**

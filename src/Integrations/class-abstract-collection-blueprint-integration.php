@@ -50,7 +50,7 @@ abstract class Abstract_Collection_Blueprint_Integration implements Collection_B
 		return $this->index_supports;
 	}
 
-	public function get_index_class(): string
+	public function get_blueprint_class(): string
 	{
 		return $this->index_class;
 	}

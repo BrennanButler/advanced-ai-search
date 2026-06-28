@@ -13,6 +13,7 @@ use WooSearch\CollectionBlueprints\Collection_Blueprint_Interface;
 /**
  * Abstract collection blueprint
  */
+#[\AllowDynamicProperties]
 abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Interface {
 
 	/**
@@ -20,73 +21,52 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 *
 	 * @var string
 	 */
-	protected string $name;
+	protected static string $name;
 
 	/**
 	 * The slug of the Collection Blueprint.
 	 *
 	 * @var string
 	 */
-	protected string $slug;
+	protected static string $slug;
 
 	/**
 	 * An array of Collection_Blueprint_Interface objects.
 	 *
 	 * @var array
 	 */
-	protected array $replicas;
+	protected static array $replicas;
 
 	/**
 	 * Whether to forward settings to replicas.
 	 *
 	 * @var boolean
 	 */
-	protected bool $forward_to_replicas;
+	protected static bool $forward_to_replicas;
 
 	/**
 	 * The record class.
 	 *
 	 * @var string
 	 */
-	protected string $record;
+	protected static $record;
 
 	/**
 	 * The record prefix. This is used primarily for the unique objectId assigned to each record.
 	 *
 	 * @var string
 	 */
-	protected string $record_prefix;
+	protected static string $record_prefix;
 
-	/**
-	 * Undocumented function
-	 *
-	 * @param string  $name The name of the collection blueprint.
-	 * @param string  $record_prefix The record prefix.
-	 * @param boolean $forward_to_replicas Whether to forward settings to replica blueprints.
-	 * @param string  $record The record class.
-	 * @throws Exception When record is not a class that exists.
-	 */
-	public function __construct( string $name, $record_prefix = 'index_', $forward_to_replicas = true, string $record = '' ) {
-
-		if ( ! class_exists( $record ) ) {
-			throw new Exception( "$record must be a class" ); // phpcs:ignore
-		}
-
-		$this->name                = $name;
-		$this->slug                = sanitize_title( $name );
-		$this->record_prefix       = $record_prefix;
-		$this->replicas            = array();
-		$this->forward_to_replicas = $forward_to_replicas;
-		$this->$record             = $record;
-	}
+	protected static $collection_settings;
 
 	/**
 	 * Get the name of the collection blueprint.
 	 *
 	 * @return string
 	 */
-	public function get_name(): string {
-		return $this->name;
+	public static function get_name(): string {
+		return self::$name;
 	}
 
 	/**
@@ -94,17 +74,20 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 *
 	 * @return string
 	 */
-	public function get_slug(): string {
-		return $this->slug;
+	public static function get_slug(): string {
+		return self::$slug;
 	}
 
+	public static function get_collection_settings(): array {
+		return self::$collection_settings;
+	}
 	/**
 	 * Get the attributes that can be searched.
 	 *
 	 * @return array
 	 */
-	public function get_searchable_attributes(): array {
-		return $this->record::get_attributes();
+	public static function get_searchable_attributes(): array {
+		return self::$record::get_attributes();
 	}
 
 	/**
@@ -112,8 +95,8 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 *
 	 * @return string
 	 */
-	public function get_record_prefix(): string {
-		return $this->record_prefix;
+	public static function get_record_prefix(): string {
+		return self::$record_prefix;
 	}
 
 	/**
@@ -121,9 +104,9 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 *
 	 * @return array
 	 */
-	public function get_attributes_for_faceting(): array {
+	public static function get_attributes_for_faceting(): array {
 
-		$attributes_available = $this->record::get_attributes_available_for_faceting();
+		$attributes_available = self::$record::get_attributes_available_for_faceting();
 
 		/**
 		 *
@@ -140,8 +123,8 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 * @param Collection_Blueprint_Interface $replica The replica index to add.
 	 * @return void
 	 */
-	public function add_replica( Collection_Blueprint_Interface $replica ): void {
-		$this->replicas[] = $replica;
+	public static function add_replica( Collection_Blueprint_Interface $replica ): void {
+		self::$replicas[] = $replica;
 	}
 
 	/**
@@ -149,8 +132,8 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 *
 	 * @return array
 	 */
-	public function get_replicas(): array {
-		return $this->replicas;
+	public static function get_replicas(): array {
+		return self::$replicas;
 	}
 
 	/**
@@ -158,19 +141,7 @@ abstract class Abstract_Collection_Blueprint implements Collection_Blueprint_Int
 	 *
 	 * @return boolean
 	 */
-	public function forward_to_replicas(): bool {
-		return $this->forward_to_replicas;
-	}
-
-	/**
-	 * Validate the index.
-	 *
-	 * @return void
-	 */
-	public function validate_index() {
-
-		$record = $this->fetch_records( 1, 1 )[0];
-
-		$record::validate_record( $record );
+	public static function forward_to_replicas(): bool {
+		return self::$forward_to_replicas;
 	}
 }

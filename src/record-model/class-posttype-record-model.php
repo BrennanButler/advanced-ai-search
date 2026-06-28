@@ -53,7 +53,7 @@ class PostType_Record_Model extends Abstract_Record_Model implements Record_Mode
 	 *
 	 * @var Data_Source_Registry
 	 */
-	protected Data_Source_Registry $data_source_registry;
+	
 
 	/**
 	 * Undocumented function
@@ -63,10 +63,10 @@ class PostType_Record_Model extends Abstract_Record_Model implements Record_Mode
 	 * @param string            $post_type The record post type.
 	 * @param Data_Source_Registry $data_source_registry The record data source registry.
 	 */
-	public function __construct( WP_Post|int $post, string $prefix = null, string $post_type = 'post', Data_Source_Registry $data_source_registry ) {
-		$this->post      = $post;
-		$this->post_type = $post_type;
-		$this->prefix    = $prefix;
+	public function __construct( $options = array() ) {
+		$this->post      = $options['post'] ?? null;
+		$this->post_type = $options['post_type'] ?? 'post';
+		$this->prefix    = $options['prefix'] ?? 'wp_';
 
 		$post_id = gettype( $this->post ) === 'object' ? $this->post->ID : $this->post;
 		$post    = gettype( $this->post ) === 'object' ? $this->post : get_post( $this->post );
@@ -77,15 +77,13 @@ class PostType_Record_Model extends Abstract_Record_Model implements Record_Mode
 		 * @since 1.0.0
 		 */
 		$this->object_id = apply_filters(
-			"woo_search_posttype_record_{$post_type}_objectid",
-			$prefix ? "{$prefix}_{$post_id}" : "{$post_type}_{$post_id}",
+			"woo_search_posttype_record_{$this->post_type}_objectid",
+			$this->prefix ? "{$this->prefix}_{$post_id}" : "{$this->post_type}_{$post_id}",
 			array(
-				$post_type,
+				$this->post_type,
 				$post_id,
 			)
 		);
-
-		$this->data_source_registry = $data_source_registry;
 
 		$post_data_service = new Post_Data_Source( $post );
 
@@ -98,32 +96,6 @@ class PostType_Record_Model extends Abstract_Record_Model implements Record_Mode
 				'thumbnail_service'    => new Thumbnail_Data_Source( $post ),
 			)
 		);
-	}
-
-	/**
-	 * Get the attributes for this record.
-	 *
-	 * @return array
-	 */
-	public static function get_attributes(): array {
-
-		$default_attributes = array(
-			'wp_id',
-			'title',
-			'post_date',
-			'post_status',
-			'is_published',
-			'comment_status',
-			'post_modified',
-			'post_parent',
-			'author',
-			'excerpt',
-			'has_excerpt',
-			'categories',
-			'tags',
-		);
-
-		return $default_attributes;
 	}
 
 	/**

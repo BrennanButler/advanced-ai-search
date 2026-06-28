@@ -23,7 +23,7 @@ class PostType_Collection_Blueprint extends Abstract_Collection_Blueprint implem
 	 *
 	 * @var string
 	 */
-	protected string $post_type;
+	protected static string $post_type;
 
 	/**
 	 * Constructor.
@@ -33,12 +33,16 @@ class PostType_Collection_Blueprint extends Abstract_Collection_Blueprint implem
 	 * @param string  $post_type The post type to use for this collection blueprint.
 	 * @param boolean $forward_to_replicas Whether to forward the settings to replica collection blueprints.
 	 */
-	public function __construct( string $post_type = 'post', string $name = "wp_posts", string $record_prefix = 'wp_', bool $forward_to_replicas = true ) {
-		parent::__construct( $name, $record_prefix, true, PostType_Record_Model::class );
+	public static function init( $blueprint_settings ): void {
 
-		$this->post_type     = $post_type;
-		$this->record        = PostType_Record_Model::class;
-		$this->record_prefix = $record_prefix;
+		self::$post_type     = 'post';
+
+		if ( isset( $blueprint_settings['post_type'] ) ) {
+			self::$post_type = $blueprint_settings['post_type'];
+		}
+
+		self::$record        = new PostType_Record_Model();
+		self::$record_prefix = 'wp_';
 	}
 
 	/**
@@ -46,7 +50,7 @@ class PostType_Collection_Blueprint extends Abstract_Collection_Blueprint implem
 	 *
 	 * @return array
 	 */
-	public function get_ranking(): array {
+	public static function get_ranking(): array {
 		return array(
 			'desc(post_date)',
 			'typo',
@@ -65,9 +69,9 @@ class PostType_Collection_Blueprint extends Abstract_Collection_Blueprint implem
 	 *
 	 * @return array
 	 */
-	public function get_searchable_attributes(): array {
+	public static function get_searchable_attributes(): array {
 
-		$attributes = $this->record::get_attributes();
+		$attributes = self::$record::get_attributes();
 
 		$attributes_to_remove = array(
 			'has_excerpt',
@@ -99,13 +103,13 @@ class PostType_Collection_Blueprint extends Abstract_Collection_Blueprint implem
 	 * @param integer $per_page The amount of records to retrieve per page.
 	 * @return array
 	 */
-	public function fetch_records( int $page, $per_page = 100 ): array {
+	public static function fetch_records( int $page, $per_page = 100 ): array {
 
 		$records = new \WP_Query(
 			array(
 				'posts_per_page' => $per_page,
 				'paged'          => $page,
-				'post_type'      => $this->post_type,
+				'post_type'      => self::$post_type,
 
 			)
 		);
@@ -117,9 +121,9 @@ class PostType_Collection_Blueprint extends Abstract_Collection_Blueprint implem
 		return array_map(
 			function ( $post ) {
 
-				$record = $this->get_record();
+				$record = self::get_record();
 
-				return new $record( $post, $this->get_record_prefix() );
+				return new $record( $post, self::get_record_prefix() );
 			},
 			$records->posts
 		);
@@ -134,7 +138,37 @@ class PostType_Collection_Blueprint_Integration extends Abstract_Collection_Blue
 		$this->slug = "post_type_index";
 		$this->name = "Post type index";
 		$this->description = "My description";
+
+		
 		$this->index_class = PostType_Collection_Blueprint::class;
+	}
+
+	public function get_blueprint_settings(): array {
+
+		$registered_post_types = get_post_types( array(), 'objects' );
+
+		// Remove woocommerce product post type as we handle that seperately.
+		unset( $registered_post_types['product'] );
+
+		return array(
+			array(
+				'key' => 'post_type',
+				'label' => 'Post Type',
+				'type' => 'select',
+				'description' => 'The post type to use for this collection blueprint.',
+				'default' => 'post',
+				'required' => true,
+				'options' => array_map(
+					function ( $post_type ) {
+						return array(
+							'value' => $post_type->name,
+							'label' => $post_type->label,
+						);
+					},
+					$registered_post_types
+				)
+			)
+		);
 	}
 
 	public function register_rest_routes(): void

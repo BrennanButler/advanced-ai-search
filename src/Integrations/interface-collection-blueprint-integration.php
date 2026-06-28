@@ -19,7 +19,9 @@ interface Collection_Blueprint_Integration_Interface {
 
     public function index_supports(): array;
 
-    public function get_index_class(): string;
+    public function get_blueprint_class(): string;
 
-    public function register_rest_routes() : void;   
+    public function register_rest_routes() : void;
+    
+    public function get_blueprint_settings(): array;
 }

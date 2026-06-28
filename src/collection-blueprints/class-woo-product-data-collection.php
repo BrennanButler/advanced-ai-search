@@ -9,7 +9,7 @@ namespace WooSearch\CollectionBlueprints;
 
 use WooSearch\CollectionBlueprints\Abstract_Collection_Blueprint;
 use WooSearch\CollectionBlueprints\Collection_Blueprint_Interface;
-use WooSearch\Records\Woo_Product_Record;
+use WooSearch\RecordModel\Woo_Product_Record_Model;
 use WooSearch\Integrations\Collection_Blueprint_Integrations_Registry;
 
 use WooSearch\Integrations\Abstract_Collection_Blueprint_Integration;
@@ -29,11 +29,10 @@ class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint imp
 	 * @param string  $record_prefix The record prefix.
 	 * @param boolean $forward_to_replicas Whether to forward the settings onto replica collection blueprints.
 	 */
-	public function __construct( string $name, string $record_prefix = 'product_', bool $forward_to_replicas = true ) {
-		parent::__construct( $name, $record_prefix, true, Woo_Product_Record::class );
+	public static function init( $blueprint_settings ): void {
 
-		$this->record        = Woo_Product_Record::class;
-		$this->record_prefix = $record_prefix;
+		self::$record        = Woo_Product_Record_Model::class;
+		self::$record_prefix = 'product_';
 
 		// Add replica indicies here.
 	}
@@ -43,7 +42,7 @@ class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint imp
 	 *
 	 * @return array
 	 */
-	public function get_ranking(): array {
+	public static function get_ranking(): array {
 		return array(
 			'desc(post_date)',
 			'typo',
@@ -63,9 +62,9 @@ class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint imp
 	 *
 	 * @return array
 	 */
-	public function get_searchable_attributes(): array {
+	public static function get_searchable_attributes(): array {
 
-		$attributes = $this->record::get_attributes();
+		$attributes = self::$record::get_attributes();
 
 		$attributes_to_remove = array(
 			'has_excerpt',
@@ -87,7 +86,7 @@ class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint imp
 	 * @return string
 	 */
 	public static function get_record(): string {
-		return Woo_Product_Record::class;
+		return Woo_Product_Record_Model::class;
 	}
 
 	/**
@@ -97,7 +96,7 @@ class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint imp
 	 * @param integer $per_page The amount of records per page.
 	 * @return array
 	 */
-	public function fetch_records( int $page, $per_page = 100 ): array {
+	public static function fetch_records( int $page, $per_page = 100 ): array {
 
 		$records = new \WP_Query(
 			array(
@@ -115,9 +114,9 @@ class Woo_Product_Collection_Blueprint extends Abstract_Collection_Blueprint imp
 		return array_map(
 			function ( $post ) {
 
-				$record = $this->get_record();
+				$record = self::get_record();
 
-				return new $record( $post, $this->get_record_prefix() );
+				return new $record( $post, self::get_record_prefix() );
 			},
 			$records->posts
 		);
@@ -128,10 +127,11 @@ class Woo_Product_Collection_Blueprint_Integration extends Abstract_Collection_B
 
 	public function __construct()
 	{
-		$this->slug = "post_type_index";
-		$this->name = "Post type index";
+		$this->slug = "woo_product_collection_blueprint";
+		$this->name = "Woo Product Collection Blueprint";
 		$this->description = "My description";
-		$this->index_class = PostType_Collection_Blueprint::class;
+
+		$this->index_class = Woo_Product_Collection_Blueprint::class;
 	}
 
 	public function register_rest_routes(): void
@@ -151,6 +151,10 @@ class Woo_Product_Collection_Blueprint_Integration extends Abstract_Collection_B
 		);
 	}
 
+	public function get_blueprint_settings(): array {
+		return array();
+	}
+	
 	protected function _fetch_post_type_records_route( WP_REST_Request $request ) {
 		$page = $request->get_param('page');
 		$per_page = $request->get_param('per_page');

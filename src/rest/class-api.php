@@ -2,10 +2,10 @@
 /**
  * Api
  *
- * @package WooSearch\Api
+ * @package WooSearch\Rest
  */
 
-namespace WooSearch\Api;
+namespace WooSearch\Rest;
 
 use WooSearch\Admin\Woo_Index;
 use WooSearch\Integrations\Index_Type_Integration;

@@ -62,4 +62,8 @@ class Data_Source_Registry {
 
 		throw new Exception( 'Service ' . esc_html( $name ) . ' not found.' );
 	}
+
+	public function get_all_sources_slugs(): array {
+		return array_keys( $this->services );
+	}
 }

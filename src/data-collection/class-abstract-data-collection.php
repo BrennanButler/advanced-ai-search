@@ -22,15 +22,19 @@ class Abstract_Data_Collection implements Data_Collection_Interface {
 	 */
 	protected $collection_blueprint;
 
+	protected $collection_settings;
+
 	/**
 	 * Constructor for the abstract data collection.
 	 *
 	 * @param string $name The name of the data collection.
 	 * @param Collection_Blueprint_Interface $collection_blueprint The collection blueprint associated with this data collection.
+	 * @param array $collection_settings The settings for the data collection.
 	 */
-	public function __construct( string $name, Collection_Blueprint_Interface $collection_blueprint ) {
+	public function __construct( string $name, Collection_Blueprint_Interface $collection_blueprint, $collection_settings = array() ) {
 		$this->name = $name;
 		$this->collection_blueprint = $collection_blueprint;
+		$this->collection_settings = $collection_settings;
 	}
 
 	/**

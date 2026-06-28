@@ -14,71 +14,24 @@ use function PHPSTORM_META\map;
  */
 class Admin_Pages {
 
-	static function setup_pages() {
+	public static function init() {
 
 		add_action(
 			'admin_menu',
-			function () {
-				self::setup_toplevel_pages();
-				self::setup_submenu_pages();
+			array(self::class, 'setup_pages')
+		);
+
+	}
+
+	public static function setup_pages() {
+		
+		$controllers_directory = __DIR__ . '/pages/controllers/';
+		$controllers = scandir($controllers_directory, SCANDIR_SORT_ASCENDING);
+
+		foreach ( $controllers as $controller ) {
+			if ( '.php' === substr( $controller, -4 ) ) {
+				require_once $controllers_directory . $controller;
 			}
-		);
-
-	}
-
-	static function setup_toplevel_pages() {
-
-		\add_menu_page(
-			'WooSearch',
-			'WooSearch',
-			'manage_options',
-			'woo-search',
-			array(self::class, 'woo_search_page'),
-			plugins_url( '' ),
-			6
-		);
-	}
-
-	public static function woo_search_page() {
-		printf(
-			'<h1>WooSearch</h1>
-			<div id="woo-search-react-app"></div>'
-		);
-	}
-
-	static function setup_submenu_pages() {
-
-		\add_submenu_page(
-			'woo-search',
-			"custom edit page",
-			'',
-			'manage_options',
-			'woo-search-manage-index',
-			array(self::class, 'woo_manage_index'),
-			-1
-		);
-
-		\add_submenu_page(
-			'woo-search',
-			'Woo Search Settings',
-			'Settings',
-			'manage_options',
-			'woo-search-settings',
-			array(self::class, 'woo_search_settings')
-		);
-	}
-
-	public static function woo_manage_index() {
-		printf(
-			'<h1>WooSearch Manage index</h1>
-			<div id="woo-search-react-app"></div>'
-		);
-	}
-
-	public static function woo_search_settings() {
-		printf(
-			'<h1>WooSearch settings</h1>
-			<div id="woo-search-react-app"></div>'
-		);
+		}
 	}
 }
